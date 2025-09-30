@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Waves, Shield, MapPin, Camera, TrendingUp, Users } from "lucide-react";
+import { Droplet, Shield, MapPin, Camera, TrendingUp, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroImage from "@/assets/hero-water-monitoring.jpg";
 
@@ -42,7 +42,12 @@ const Index = () => {
         
         <div className="relative z-10 container mx-auto px-4 text-center">
           <div className="flex items-center justify-center mb-6">
-            <Waves className="h-20 w-20 text-white" />
+            <div className="relative">
+              <Droplet className="h-20 w-20 text-white" fill="currentColor" />
+              <div className="absolute -bottom-1 -right-1 bg-success p-2 rounded-full">
+                <MapPin className="h-6 w-6 text-white" />
+              </div>
+            </div>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
             Jal Rakshak
@@ -60,13 +65,6 @@ const Index = () => {
               className="bg-white text-primary hover:bg-blue-50 text-lg px-8 py-6 shadow-elevated"
             >
               Get Started
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-6"
-            >
-              Learn More
             </Button>
           </div>
         </div>
@@ -173,7 +171,7 @@ const Index = () => {
       <footer className="bg-primary-dark text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center mb-4">
-            <Waves className="h-8 w-8 mr-2" />
+            <Droplet className="h-8 w-8 mr-2" fill="currentColor" />
             <span className="text-xl font-bold">Jal Rakshak</span>
           </div>
           <p className="text-blue-200">Smart Water Monitoring for a Safer India</p>

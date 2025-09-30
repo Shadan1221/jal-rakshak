@@ -1,182 +1,249 @@
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Camera, MapPin, FileText, Bell, Award, Menu } from "lucide-react";
+import { Camera, FileText, Clock, CheckCircle2, XCircle, LogOut, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import RecordReading from "@/components/RecordReading";
+
+interface Reading {
+  id: string;
+  site_id: string;
+  water_level: number;
+  photo_url: string;
+  timestamp: string;
+  status: string;
+  sites: {
+    name: string;
+  };
+}
 
 const DashboardField = () => {
+  const [recordDialogOpen, setRecordDialogOpen] = useState(false);
+  const [readings, setReadings] = useState<Reading[]>([]);
+  const [stats, setStats] = useState({
+    total: 0,
+    thisMonth: 0,
+    verified: 0,
+    pending: 0,
+  });
   const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const stats = [
-    { label: "Total Readings", value: "127", icon: FileText, color: "text-primary" },
-    { label: "This Month", value: "23", icon: Camera, color: "text-secondary" },
-    { label: "Verified", value: "119", icon: Award, color: "text-success" },
-    { label: "Pending", value: "8", icon: Bell, color: "text-warning" },
-  ];
+  useEffect(() => {
+    loadReadings();
+  }, []);
 
-  const recentSubmissions = [
-    { id: 1, site: "Site A-101", level: "2.4m", date: "Today, 9:30 AM", status: "verified" },
-    { id: 2, site: "Site A-102", level: "1.8m", date: "Today, 6:15 AM", status: "pending" },
-    { id: 3, site: "Site A-101", level: "2.2m", date: "Yesterday, 9:30 AM", status: "verified" },
-  ];
+  const loadReadings = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("readings")
+      .select(`
+        *,
+        sites (name)
+      `)
+      .eq("user_id", user.id)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to load readings",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setReadings(data || []);
+
+    // Calculate stats
+    const now = new Date();
+    const thisMonth = data?.filter((r) => {
+      const readingDate = new Date(r.created_at);
+      return readingDate.getMonth() === now.getMonth() && 
+             readingDate.getFullYear() === now.getFullYear();
+    }).length || 0;
+
+    setStats({
+      total: data?.length || 0,
+      thisMonth,
+      verified: data?.filter((r) => r.status === "verified").length || 0,
+      pending: data?.filter((r) => r.status === "pending").length || 0,
+    });
+  };
+
+  const handleLogout = () => {
+    navigate("/login");
+  };
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case "verified":
+        return <CheckCircle2 className="h-4 w-4 text-success" />;
+      case "rejected":
+        return <XCircle className="h-4 w-4 text-destructive" />;
+      default:
+        return <Clock className="h-4 w-4 text-warning" />;
+    }
+  };
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "verified":
+        return "Verified";
+      case "rejected":
+        return "Rejected";
+      default:
+        return "Pending";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background pb-20">
-      {/* Mobile Header */}
-      <div className="bg-gradient-to-r from-primary to-primary-light text-white sticky top-0 z-10 shadow-lg">
+      {/* Header */}
+      <div className="sticky top-0 z-10 bg-gradient-water border-b border-border/40 backdrop-blur-sm">
         <div className="px-4 py-4">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <Menu className="h-5 w-5" />
-              <h1 className="text-lg font-bold">Jal Rakshak</h1>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-bold text-white">Field Personnel</h1>
+              <p className="text-sm text-white/80">Water Guardian Dashboard</p>
             </div>
-            <Button 
-              variant="secondary" 
-              size="sm"
-              onClick={() => navigate("/")}
-              className="text-xs"
-            >
-              Logout
-            </Button>
-          </div>
-          <div>
-            <p className="text-sm text-blue-100">Welcome, Guardian!</p>
-            <p className="text-xs text-blue-200">Field Personnel</p>
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/20"
+                onClick={() => navigate("/")}
+              >
+                <Home className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/20"
+                onClick={handleLogout}
+              >
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Stats Grid */}
       <div className="px-4 py-6">
-        {/* Stats Grid - Mobile Optimized */}
         <div className="grid grid-cols-2 gap-3 mb-6">
-          {stats.map((stat) => (
-            <Card key={stat.label} className="shadow-card">
-              <CardContent className="pt-4 pb-3 px-3">
-                <div className="flex flex-col">
-                  <div className="flex items-center justify-between mb-1">
-                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                  </div>
-                  <p className="text-xs text-muted-foreground">{stat.label}</p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Total Readings</CardDescription>
+              <CardTitle className="text-2xl">{stats.total}</CardTitle>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">This Month</CardDescription>
+              <CardTitle className="text-2xl">{stats.thisMonth}</CardTitle>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Verified</CardDescription>
+              <CardTitle className="text-2xl text-success">{stats.verified}</CardTitle>
+            </CardHeader>
+          </Card>
+          
+          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+            <CardHeader className="pb-2">
+              <CardDescription className="text-xs">Pending</CardDescription>
+              <CardTitle className="text-2xl text-warning">{stats.pending}</CardTitle>
+            </CardHeader>
+          </Card>
         </div>
 
-        {/* Main Actions - Mobile Optimized */}
+        {/* Action Cards */}
         <div className="space-y-3 mb-6">
-          <Card className="shadow-card active:shadow-elevated transition-shadow border-2 border-primary/20">
-            <CardHeader className="pb-3">
+          <Card 
+            className="bg-gradient-to-br from-primary to-primary/80 text-white cursor-pointer hover:shadow-lg transition-shadow"
+            onClick={() => setRecordDialogOpen(true)}
+          >
+            <CardHeader>
               <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary-light flex items-center justify-center flex-shrink-0">
-                  <Camera className="h-6 w-6 text-white" />
+                <div className="bg-white/20 p-3 rounded-lg">
+                  <Camera className="h-6 w-6" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <CardTitle className="text-base">Record New Reading</CardTitle>
-                  <CardDescription className="text-xs">Capture water level with photo</CardDescription>
+                <div>
+                  <CardTitle className="text-white">Record New Reading</CardTitle>
+                  <CardDescription className="text-white/80">
+                    Capture gauge post & submit data
+                  </CardDescription>
                 </div>
               </div>
             </CardHeader>
-            <CardContent className="pt-0">
-              <Button className="w-full bg-gradient-to-r from-primary to-primary-light py-6">
-                <Camera className="h-5 w-5 mr-2" />
-                Start Recording
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="shadow-card active:shadow-elevated transition-shadow">
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-3">
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-secondary to-accent flex items-center justify-center flex-shrink-0">
-                  <FileText className="h-6 w-6 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <CardTitle className="text-base">My Submissions</CardTitle>
-                  <CardDescription className="text-xs">View timeline and status</CardDescription>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <Button variant="outline" className="w-full py-6">
-                <FileText className="h-5 w-5 mr-2" />
-                View History
-              </Button>
-            </CardContent>
           </Card>
         </div>
 
-        {/* Recent Submissions - Mobile Optimized */}
-        <Card className="shadow-card mb-6">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Recent Submissions</CardTitle>
-            <CardDescription className="text-xs">Your latest water level readings</CardDescription>
-          </CardHeader>
-          <CardContent className="px-3">
-            <div className="space-y-3">
-              {recentSubmissions.map((submission) => (
-                <div
-                  key={submission.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-muted/50 active:bg-muted transition-colors"
-                >
-                  <div className="flex items-start gap-3 flex-1 min-w-0">
-                    <MapPin className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-sm text-foreground">{submission.site}</p>
-                      <p className="text-xs text-muted-foreground">{submission.date}</p>
-                    </div>
-                  </div>
-                  <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                    <p className="text-base font-bold text-primary">{submission.level}</p>
-                    <div
-                      className={`px-2 py-0.5 rounded-full text-xs font-semibold ${
-                        submission.status === "verified"
-                          ? "bg-success/10 text-success"
-                          : "bg-warning/10 text-warning"
-                      }`}
-                    >
-                      {submission.status === "verified" ? "✓" : "⏳"}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        {/* Recent Submissions */}
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <FileText className="h-5 w-5 text-primary" />
+            <h2 className="text-lg font-semibold">My Submissions</h2>
+          </div>
 
-        {/* Encouragement Message - Mobile Optimized */}
-        <Card className="bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/20">
-          <CardContent className="pt-4 pb-4 px-4">
-            <div className="flex items-start gap-3">
-              <Award className="h-10 w-10 text-primary flex-shrink-0" />
-              <div>
-                <p className="font-semibold text-sm text-foreground mb-1">You are a Water Guardian!</p>
-                <p className="text-xs text-muted-foreground">
-                  Thank you for contributing to flood safety. Your vigilance protects communities.
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Fixed Bottom Navigation for Mobile */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-elevated z-10">
-        <div className="grid grid-cols-3 gap-2 p-3">
-          <Button variant="ghost" className="flex-col h-auto py-2 gap-1">
-            <Camera className="h-5 w-5" />
-            <span className="text-xs">Record</span>
-          </Button>
-          <Button variant="ghost" className="flex-col h-auto py-2 gap-1">
-            <FileText className="h-5 w-5" />
-            <span className="text-xs">History</span>
-          </Button>
-          <Button variant="ghost" className="flex-col h-auto py-2 gap-1">
-            <Bell className="h-5 w-5" />
-            <span className="text-xs">Alerts</span>
-          </Button>
+          <div className="space-y-3">
+            {readings.length === 0 ? (
+              <Card style={{ backgroundImage: 'var(--pattern-indian)' }}>
+                <CardContent className="py-8 text-center text-muted-foreground">
+                  <p>No submissions yet</p>
+                  <p className="text-sm">Tap "Record New Reading" to get started</p>
+                </CardContent>
+              </Card>
+            ) : (
+              readings.map((reading) => (
+                <Card key={reading.id} className="overflow-hidden" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+                  <CardContent className="p-4">
+                    <div className="flex gap-3">
+                      <img
+                        src={reading.photo_url}
+                        alt="Gauge reading"
+                        className="w-20 h-20 object-cover rounded-lg border"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between mb-1">
+                          <p className="font-medium text-sm truncate">
+                            {reading.sites.name}
+                          </p>
+                          <div className="flex items-center gap-1">
+                            {getStatusIcon(reading.status)}
+                            <span className="text-xs">{getStatusText(reading.status)}</span>
+                          </div>
+                        </div>
+                        <p className="text-2xl font-bold text-primary mb-1">
+                          {reading.water_level}m
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(reading.timestamp).toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Record Reading Dialog */}
+      <RecordReading
+        open={recordDialogOpen}
+        onOpenChange={setRecordDialogOpen}
+        onSuccess={loadReadings}
+      />
     </div>
   );
 };

@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Waves, ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { Droplet, ArrowLeft, Eye, EyeOff, Copy, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type Role = "field" | "supervisor" | "analyst";
@@ -16,6 +16,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [copiedField, setCopiedField] = useState<string>("");
 
   const roleNames = {
     field: "Field Personnel",
@@ -28,6 +29,16 @@ const Login = () => {
     field: { username: "field_demo", password: "field123" },
     supervisor: { username: "supervisor_demo", password: "super123" },
     analyst: { username: "analyst_demo", password: "admin123" }
+  };
+
+  const copyToClipboard = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    toast({
+      title: "Copied!",
+      description: `${field} copied to clipboard`,
+    });
+    setTimeout(() => setCopiedField(""), 2000);
   };
 
   const handleLogin = () => {
@@ -56,7 +67,7 @@ const Login = () => {
         <div className="w-full max-w-md sm:max-w-4xl">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-4">
-              <Waves className="h-12 w-12 text-white" />
+              <Droplet className="h-12 w-12 text-white" fill="currentColor" />
             </div>
             <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Jal Rakshak</h1>
             <p className="text-blue-100 text-base sm:text-lg">Select Your Role to Continue</p>
@@ -107,7 +118,7 @@ const Login = () => {
             Back
           </Button>
           <div className="flex items-center gap-3 mb-2">
-            <Waves className="h-8 w-8 text-primary" />
+            <Droplet className="h-8 w-8 text-primary" fill="currentColor" />
             <div>
               <CardTitle className="text-xl sm:text-2xl text-primary">Login</CardTitle>
               <CardDescription className="text-sm sm:text-base">{roleNames[selectedRole]}</CardDescription>
@@ -160,11 +171,47 @@ const Login = () => {
             Login
           </Button>
 
-          <div className="bg-muted/50 rounded-lg p-4 text-sm">
-            <p className="font-semibold text-foreground mb-2">Demo Credentials:</p>
-            <div className="space-y-1 text-muted-foreground">
-              <p>Username: <span className="font-mono text-foreground">{demoCredentials[selectedRole].username}</span></p>
-              <p>Password: <span className="font-mono text-foreground">{demoCredentials[selectedRole].password}</span></p>
+          <div className="bg-muted/50 rounded-lg p-4 text-sm border" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+            <p className="font-semibold text-foreground mb-3">Demo Credentials:</p>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex-1">
+                  <p className="text-xs text-muted-foreground">Username</p>
+                  <p className="font-mono text-foreground font-semibold">{demoCredentials[selectedRole].username}</p>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  onClick={() => copyToClipboard(demoCredentials[selectedRole].username, "Username")}
+                >
+                  {copiedField === "Username" ? (
+                    <Check className="h-4 w-4 text-success" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex-1">
+                  <p className="text-xs text-muted-foreground">Password</p>
+                  <p className="font-mono text-foreground font-semibold">{demoCredentials[selectedRole].password}</p>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 w-8 p-0"
+                  onClick={() => copyToClipboard(demoCredentials[selectedRole].password, "Password")}
+                >
+                  {copiedField === "Password" ? (
+                    <Check className="h-4 w-4 text-success" />
+                  ) : (
+                    <Copy className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
 
