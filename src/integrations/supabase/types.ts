@@ -14,7 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      readings: {
+        Row: {
+          created_at: string | null
+          id: string
+          latitude: number
+          longitude: number
+          photo_url: string
+          site_id: string
+          status: string
+          timestamp: string | null
+          user_id: string
+          user_name: string
+          water_level: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          photo_url: string
+          site_id: string
+          status?: string
+          timestamp?: string | null
+          user_id: string
+          user_name: string
+          water_level: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          photo_url?: string
+          site_id?: string
+          status?: string
+          timestamp?: string | null
+          user_id?: string
+          user_name?: string
+          water_level?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "readings_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "sites"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sites: {
+        Row: {
+          created_at: string | null
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          radius: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          radius: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          radius?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
