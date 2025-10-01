@@ -147,7 +147,7 @@ const DashboardSupervisor = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-gradient-water border-b border-border/40 backdrop-blur-sm">
+      <div className="sticky top-0 z-10 bg-gradient-to-r from-primary to-secondary border-b border-border/40 backdrop-blur-sm shadow-md">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -179,31 +179,31 @@ const DashboardSupervisor = () => {
       {/* Stats Grid */}
       <div className="px-4 py-6">
         <div className="grid grid-cols-2 gap-3 mb-6">
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Total Submissions</CardDescription>
-              <CardTitle className="text-2xl">{stats.total}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">Total Submissions</CardDescription>
+              <CardTitle className="text-3xl font-bold text-foreground">{stats.total}</CardTitle>
             </CardHeader>
           </Card>
           
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Pending Review</CardDescription>
-              <CardTitle className="text-2xl text-warning">{stats.pending}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">Pending Review</CardDescription>
+              <CardTitle className="text-3xl font-bold text-warning">{stats.pending}</CardTitle>
             </CardHeader>
           </Card>
           
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Verified</CardDescription>
-              <CardTitle className="text-2xl text-success">{stats.verified}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">Verified</CardDescription>
+              <CardTitle className="text-3xl font-bold text-success">{stats.verified}</CardTitle>
             </CardHeader>
           </Card>
           
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Rejected</CardDescription>
-              <CardTitle className="text-2xl text-destructive">{stats.rejected}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">Rejected</CardDescription>
+              <CardTitle className="text-3xl font-bold text-destructive">{stats.rejected}</CardTitle>
             </CardHeader>
           </Card>
         </div>
@@ -228,21 +228,21 @@ const DashboardSupervisor = () => {
         {/* Submissions List */}
         <div className="space-y-3">
           {filteredReadings.length === 0 ? (
-            <Card style={{ backgroundImage: 'var(--pattern-indian)' }}>
-              <CardContent className="py-8 text-center text-muted-foreground">
-                <p>No submissions found</p>
+            <Card className="bg-card border-border">
+              <CardContent className="py-12 text-center">
+                <p className="text-foreground font-medium mb-1">No submissions found</p>
               </CardContent>
             </Card>
           ) : (
             filteredReadings.map((reading) => (
-              <Card key={reading.id} className="overflow-hidden" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+              <Card key={reading.id} className="overflow-hidden bg-card border-border hover:shadow-md transition-shadow">
                 <CardContent className="p-4">
                   <div className="space-y-3">
                     {/* Header */}
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="font-semibold">{reading.sites.name}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="font-semibold text-foreground">{reading.sites.name}</p>
+                        <p className="text-sm text-foreground/60">
                           By {reading.user_name}
                         </p>
                       </div>
@@ -272,18 +272,18 @@ const DashboardSupervisor = () => {
                     {/* Details */}
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div>
-                        <p className="text-muted-foreground text-xs">Water Level</p>
+                        <p className="text-foreground/60 text-xs">Water Level</p>
                         <p className="font-bold text-lg text-primary">{reading.water_level}m</p>
                       </div>
                       <div>
-                        <p className="text-muted-foreground text-xs">Timestamp</p>
-                        <p className="font-medium">
+                        <p className="text-foreground/60 text-xs">Timestamp</p>
+                        <p className="font-medium text-foreground">
                           {new Date(reading.timestamp).toLocaleString()}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 text-xs text-foreground/60">
                       <MapPin className="h-3 w-3" />
                       <span>{reading.latitude.toFixed(6)}, {reading.longitude.toFixed(6)}</span>
                     </div>

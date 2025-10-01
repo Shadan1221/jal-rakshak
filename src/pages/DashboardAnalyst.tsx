@@ -54,7 +54,7 @@ const DashboardAnalyst = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Desktop Header */}
-      <div className="bg-gradient-to-r from-primary to-primary-light text-white sticky top-0 z-10 shadow-lg">
+      <div className="bg-gradient-to-r from-primary to-secondary text-white sticky top-0 z-10 shadow-lg">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
