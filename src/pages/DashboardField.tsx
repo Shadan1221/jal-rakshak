@@ -136,31 +136,31 @@ const DashboardField = () => {
       {/* Stats Grid */}
       <div className="px-4 py-6">
         <div className="grid grid-cols-2 gap-3 mb-6">
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Total Readings</CardDescription>
-              <CardTitle className="text-2xl">{stats.total}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">Total Readings</CardDescription>
+              <CardTitle className="text-3xl font-bold text-foreground">{stats.total}</CardTitle>
             </CardHeader>
           </Card>
           
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">This Month</CardDescription>
-              <CardTitle className="text-2xl">{stats.thisMonth}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">This Month</CardDescription>
+              <CardTitle className="text-3xl font-bold text-foreground">{stats.thisMonth}</CardTitle>
             </CardHeader>
           </Card>
           
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Verified</CardDescription>
-              <CardTitle className="text-2xl text-success">{stats.verified}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">Verified</CardDescription>
+              <CardTitle className="text-3xl font-bold text-success">{stats.verified}</CardTitle>
             </CardHeader>
           </Card>
           
-          <Card className="bg-card/50 backdrop-blur-sm" style={{ backgroundImage: 'var(--pattern-indian)' }}>
-            <CardHeader className="pb-2">
-              <CardDescription className="text-xs">Pending</CardDescription>
-              <CardTitle className="text-2xl text-warning">{stats.pending}</CardTitle>
+          <Card className="bg-card border-border shadow-sm">
+            <CardHeader className="pb-3 pt-4 px-4">
+              <CardDescription className="text-xs font-medium text-foreground/60 mb-1">Pending</CardDescription>
+              <CardTitle className="text-3xl font-bold text-warning">{stats.pending}</CardTitle>
             </CardHeader>
           </Card>
         </div>
@@ -168,17 +168,17 @@ const DashboardField = () => {
         {/* Action Cards */}
         <div className="space-y-3 mb-6">
           <Card 
-            className="bg-gradient-to-br from-primary to-primary/80 text-white cursor-pointer hover:shadow-lg transition-shadow"
+            className="bg-gradient-to-br from-primary to-primary/80 text-white cursor-pointer hover:shadow-xl transition-all active:scale-[0.98] border-0"
             onClick={() => setRecordDialogOpen(true)}
           >
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <div className="bg-white/20 p-3 rounded-lg">
-                  <Camera className="h-6 w-6" />
+            <CardHeader className="p-5">
+              <div className="flex items-center gap-4">
+                <div className="bg-white/20 p-3 rounded-xl">
+                  <Camera className="h-7 w-7" />
                 </div>
                 <div>
-                  <CardTitle className="text-white">Record New Reading</CardTitle>
-                  <CardDescription className="text-white/80">
+                  <CardTitle className="text-white text-lg mb-1">Record New Reading</CardTitle>
+                  <CardDescription className="text-white/90 text-sm">
                     Capture gauge post & submit data
                   </CardDescription>
                 </div>
@@ -189,43 +189,43 @@ const DashboardField = () => {
 
         {/* Recent Submissions */}
         <div>
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-4">
             <FileText className="h-5 w-5 text-primary" />
-            <h2 className="text-lg font-semibold">My Submissions</h2>
+            <h2 className="text-lg font-semibold text-foreground">My Submissions</h2>
           </div>
 
           <div className="space-y-3">
             {readings.length === 0 ? (
-              <Card style={{ backgroundImage: 'var(--pattern-indian)' }}>
-                <CardContent className="py-8 text-center text-muted-foreground">
-                  <p>No submissions yet</p>
-                  <p className="text-sm">Tap "Record New Reading" to get started</p>
+              <Card className="bg-card border-border">
+                <CardContent className="py-12 text-center">
+                  <p className="text-foreground font-medium mb-1">No submissions yet</p>
+                  <p className="text-sm text-foreground/60">Tap "Record New Reading" to get started</p>
                 </CardContent>
               </Card>
             ) : (
               readings.map((reading) => (
-                <Card key={reading.id} className="overflow-hidden" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+                <Card key={reading.id} className="overflow-hidden bg-card border-border hover:shadow-md transition-shadow">
                   <CardContent className="p-4">
-                    <div className="flex gap-3">
+                    <div className="flex gap-4">
                       <img
                         src={reading.photo_url}
                         alt="Gauge reading"
-                        className="w-20 h-20 object-cover rounded-lg border"
+                        className="w-24 h-24 object-cover rounded-lg border-2 border-border"
                       />
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-1">
-                          <p className="font-medium text-sm truncate">
+                        <div className="flex items-start justify-between mb-2">
+                          <p className="font-semibold text-sm text-foreground truncate pr-2">
                             {reading.sites.name}
                           </p>
-                          <div className="flex items-center gap-1">
+                          <div className="flex items-center gap-1.5 flex-shrink-0">
                             {getStatusIcon(reading.status)}
-                            <span className="text-xs">{getStatusText(reading.status)}</span>
+                            <span className="text-xs font-medium text-foreground/80">{getStatusText(reading.status)}</span>
                           </div>
                         </div>
-                        <p className="text-2xl font-bold text-primary mb-1">
+                        <p className="text-3xl font-bold text-primary mb-2">
                           {reading.water_level}m
                         </p>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-foreground/60 font-medium">
                           {new Date(reading.timestamp).toLocaleString()}
                         </p>
                       </div>
