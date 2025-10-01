@@ -104,7 +104,7 @@ const DashboardField = () => {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <div className="sticky top-0 z-10 bg-gradient-water border-b border-border/40 backdrop-blur-sm">
+      <div className="sticky top-0 z-10 bg-gradient-to-r from-primary to-secondary border-b border-border/40 backdrop-blur-sm shadow-md">
         <div className="px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
