@@ -263,12 +263,14 @@ const RecordReading = ({ open, onOpenChange, onSuccess }: RecordReadingProps) =>
                   <>
                     <div className="h-64 rounded-lg overflow-hidden border">
                       <MapContainer
+                        key={`${userLocation.lat}-${userLocation.lng}`}
                         center={[userLocation.lat, userLocation.lng]}
                         zoom={15}
                         style={{ height: "100%", width: "100%" }}
                         scrollWheelZoom={false}
                       >
                         <TileLayer
+                          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
                         <Marker position={[userLocation.lat, userLocation.lng]}>
