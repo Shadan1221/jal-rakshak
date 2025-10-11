@@ -7,6 +7,7 @@ import { CheckCircle2, XCircle, Clock, LogOut, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import logo from "@/assets/logo.png";
 
 interface Reading {
   id: string;
@@ -154,7 +155,12 @@ const DashboardSupervisor = () => {
               <h1 className="text-xl font-bold text-white">Supervisor</h1>
               <p className="text-sm text-white/80">Verify Field Submissions</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-3">
+              <img 
+                src={logo} 
+                alt="Neer Nirakshan Logo" 
+                className="h-10 w-10 object-contain"
+              />
               <Button
                 variant="ghost"
                 size="icon"

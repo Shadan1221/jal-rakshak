@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import RecordReading from "@/components/RecordReading";
+import logo from "@/assets/logo.png";
 
 interface Reading {
   id: string;
@@ -111,7 +112,12 @@ const DashboardField = () => {
               <h1 className="text-xl font-bold text-white">Field Personnel</h1>
               <p className="text-sm text-white/80">Water Guardian Dashboard</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex items-center gap-3">
+              <img 
+                src={logo} 
+                alt="Neer Nirakshan Logo" 
+                className="h-10 w-10 object-contain"
+              />
               <Button
                 variant="ghost"
                 size="icon"

@@ -16,6 +16,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import logo from "@/assets/logo.png";
 
 const DashboardAnalyst = () => {
   const navigate = useNavigate();
@@ -65,6 +66,11 @@ const DashboardAnalyst = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <img 
+                src={logo} 
+                alt="Neer Nirakshan Logo" 
+                className="h-12 w-12 object-contain"
+              />
               <Button variant="ghost" className="text-white">
                 <Settings className="h-5 w-5 mr-2" />
                 Settings
