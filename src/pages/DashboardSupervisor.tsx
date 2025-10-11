@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, Clock, LogOut, Home, MapPin } from "lucide-react";
+import { CheckCircle2, XCircle, Clock, LogOut, MapPin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -136,7 +136,7 @@ const DashboardSupervisor = () => {
   };
 
   const handleLogout = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   const filteredReadings = readings.filter((r) => {
@@ -155,14 +155,6 @@ const DashboardSupervisor = () => {
               <p className="text-sm text-white/80">Verify Field Submissions</p>
             </div>
             <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-white/20"
-                onClick={() => navigate("/")}
-              >
-                <Home className="h-5 w-5" />
-              </Button>
               <Button
                 variant="ghost"
                 size="icon"

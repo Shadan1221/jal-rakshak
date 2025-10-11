@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Droplet, ArrowLeft, Eye, EyeOff, Copy, Check } from "lucide-react";
+import { Droplet, ArrowLeft, Eye, EyeOff, Copy, Check, Users, Shield, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 type Role = "field" | "supervisor" | "analyst";
@@ -18,10 +18,34 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [copiedField, setCopiedField] = useState<string>("");
 
-  const roleNames = {
-    field: "Field Personnel",
-    supervisor: "Supervisor",
-    analyst: "Central Analyst"
+  const roleConfig = {
+    field: {
+      name: "Field Personnel",
+      description: "Record water level readings",
+      icon: Users,
+      borderColor: "border-l-primary",
+      bgColor: "bg-primary/5",
+      iconBg: "bg-primary/10",
+      iconColor: "text-primary",
+    },
+    supervisor: {
+      name: "Supervisor",
+      description: "Verify and monitor submissions",
+      icon: Shield,
+      borderColor: "border-l-secondary",
+      bgColor: "bg-secondary/5",
+      iconBg: "bg-secondary/10",
+      iconColor: "text-secondary",
+    },
+    analyst: {
+      name: "Central Analyst",
+      description: "Analyze and manage system",
+      icon: BarChart3,
+      borderColor: "border-l-accent",
+      bgColor: "bg-accent/5",
+      iconBg: "bg-accent/10",
+      iconColor: "text-accent",
+    },
   };
 
   // Demo credentials for testing
@@ -49,7 +73,7 @@ const Login = () => {
     if (username === credentials.username && password === credentials.password) {
       toast({
         title: "Login Successful",
-        description: `Welcome, ${roleNames[selectedRole]}!`,
+        description: `Welcome, ${roleConfig[selectedRole].name}!`,
       });
       navigate(`/dashboard/${selectedRole}`);
     } else {
@@ -63,38 +87,64 @@ const Login = () => {
 
   if (!selectedRole) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary-light to-secondary p-4">
-        <div className="w-full max-w-md sm:max-w-4xl">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-secondary/5 p-4">
+        <div className="w-full max-w-md">
+          {/* Header */}
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <Droplet className="h-12 w-12 text-white" fill="currentColor" />
+            <div className="flex items-center justify-center mb-6">
+              <div className="relative">
+                <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-lg">
+                  <Droplet className="h-10 w-10 text-white" fill="currentColor" />
+                </div>
+              </div>
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Neer Nirakshan</h1>
-            <p className="text-blue-100 text-base sm:text-lg">Select Your Role to Continue</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Neer Nirakshan</h1>
+            <p className="text-muted-foreground text-base">Smart Water Monitoring System</p>
           </div>
 
-          <div className="grid gap-4 sm:gap-6 sm:grid-cols-3">
-            {(["field", "supervisor", "analyst"] as Role[]).map((role) => (
-              <Card
-                key={role}
-                className="cursor-pointer transition-all active:scale-95 sm:hover:scale-105 sm:hover:shadow-xl bg-white/95 backdrop-blur border-0"
-                onClick={() => setSelectedRole(role)}
-              >
-                <CardHeader className="text-center p-4 sm:p-6">
-                  <CardTitle className="text-lg sm:text-xl text-primary">{roleNames[role]}</CardTitle>
-                  <CardDescription className="text-sm">
-                    {role === "field" && "Record water level readings"}
-                    {role === "supervisor" && "Verify and monitor submissions"}
-                    {role === "analyst" && "Analyze and manage system"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex justify-center p-4 pt-0">
-                  <Button className="w-full bg-gradient-to-r from-primary to-primary-light">
-                    Login
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+          {/* Welcome Message */}
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-semibold text-foreground mb-1">Welcome Back</h2>
+            <p className="text-sm text-muted-foreground">Select your role to continue</p>
+          </div>
+
+          {/* Role Selection Cards */}
+          <div className="space-y-3">
+            {(["field", "supervisor", "analyst"] as Role[]).map((role) => {
+              const config = roleConfig[role];
+              const Icon = config.icon;
+              
+              return (
+                <Card
+                  key={role}
+                  className={`cursor-pointer transition-all active:scale-[0.98] hover:shadow-lg border-l-4 ${config.borderColor} ${config.bgColor}`}
+                  onClick={() => setSelectedRole(role)}
+                >
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-4">
+                      <div className={`${config.iconBg} p-3 rounded-xl flex-shrink-0`}>
+                        <Icon className={`h-6 w-6 ${config.iconColor}`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-foreground text-base mb-0.5">
+                          {config.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground">
+                          {config.description}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Footer */}
+          <div className="text-center mt-8">
+            <p className="text-xs text-muted-foreground">
+              Empowering water guardians across India
+            </p>
           </div>
         </div>
       </div>
@@ -102,8 +152,8 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary via-primary-light to-secondary p-4">
-      <Card className="w-full max-w-md bg-white/95 backdrop-blur border-0 shadow-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-primary/5 to-secondary/5 p-4">
+      <Card className="w-full max-w-md shadow-xl border-border">
         <CardHeader>
           <Button
             variant="ghost"
@@ -118,10 +168,15 @@ const Login = () => {
             Back
           </Button>
           <div className="flex items-center gap-3 mb-2">
-            <Droplet className="h-8 w-8 text-primary" fill="currentColor" />
+            <div className={`${roleConfig[selectedRole].iconBg} p-2 rounded-lg`}>
+              {(() => {
+                const Icon = roleConfig[selectedRole].icon;
+                return <Icon className={`h-6 w-6 ${roleConfig[selectedRole].iconColor}`} />;
+              })()}
+            </div>
             <div>
-              <CardTitle className="text-xl sm:text-2xl text-primary">Login</CardTitle>
-              <CardDescription className="text-sm sm:text-base">{roleNames[selectedRole]}</CardDescription>
+              <CardTitle className="text-xl text-foreground">Login</CardTitle>
+              <CardDescription className="text-sm">{roleConfig[selectedRole].name}</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -165,13 +220,13 @@ const Login = () => {
 
           <Button
             onClick={handleLogin}
-            className="w-full bg-gradient-to-r from-primary to-primary-light text-base sm:text-lg py-5 sm:py-6"
+            className="w-full bg-gradient-to-r from-primary to-secondary text-base py-6 hover:opacity-90"
             disabled={!username || !password}
           >
             Login
           </Button>
 
-          <div className="bg-muted/50 rounded-lg p-4 text-sm border" style={{ backgroundImage: 'var(--pattern-indian)' }}>
+          <div className="bg-muted/50 rounded-lg p-4 text-sm border">
             <p className="font-semibold text-foreground mb-3">Demo Credentials:</p>
             <div className="space-y-3">
               <div className="flex items-center justify-between gap-2">
@@ -213,10 +268,6 @@ const Login = () => {
                 </Button>
               </div>
             </div>
-          </div>
-
-          <div className="text-center text-xs sm:text-sm text-muted-foreground pt-4 border-t">
-            <p>Smart Water Monitoring for a Safer India</p>
           </div>
         </CardContent>
       </Card>

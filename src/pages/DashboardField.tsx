@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Camera, FileText, Clock, CheckCircle2, XCircle, LogOut, Home } from "lucide-react";
+import { Camera, FileText, Clock, CheckCircle2, XCircle, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -76,7 +76,7 @@ const DashboardField = () => {
   };
 
   const handleLogout = () => {
-    navigate("/login");
+    navigate("/");
   };
 
   const getStatusIcon = (status: string) => {
@@ -112,14 +112,6 @@ const DashboardField = () => {
               <p className="text-sm text-white/80">Water Guardian Dashboard</p>
             </div>
             <div className="flex gap-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-white/20"
-                onClick={() => navigate("/")}
-              >
-                <Home className="h-5 w-5" />
-              </Button>
               <Button
                 variant="ghost"
                 size="icon"
