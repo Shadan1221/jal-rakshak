@@ -50,7 +50,7 @@ const Index = () => {
             </div>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 animate-fade-in">
-            Jal Rakshak
+            Neer Nirakshan
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 mb-4 max-w-2xl mx-auto">
             Guardian of Water
@@ -76,7 +76,7 @@ const Index = () => {
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-4xl font-bold text-primary mb-6">Our Mission</h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Jal Rakshak empowers field personnel, supervisors, and analysts with a unified platform
+              Neer Nirakshan empowers field personnel, supervisors, and analysts with a unified platform
               to monitor water levels across India. Through geofencing, live photo verification, and
               multi-level authentication, we ensure accurate, tamper-proof data collection for flood
               prevention and water resource management.
@@ -172,10 +172,10 @@ const Index = () => {
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center mb-4">
             <Droplet className="h-8 w-8 mr-2" fill="currentColor" />
-            <span className="text-xl font-bold">Jal Rakshak</span>
+            <span className="text-xl font-bold">Neer Nirakshan</span>
           </div>
           <p className="text-blue-200">Smart Water Monitoring for a Safer India</p>
-          <p className="text-blue-300 text-sm mt-4">© 2024 Jal Rakshak. All rights reserved.</p>
+          <p className="text-blue-300 text-sm mt-4">© 2024 Neer Nirakshan. All rights reserved.</p>
         </div>
       </footer>
     </div>

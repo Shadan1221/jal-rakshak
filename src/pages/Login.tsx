@@ -69,7 +69,7 @@ const Login = () => {
             <div className="flex items-center justify-center mb-4">
               <Droplet className="h-12 w-12 text-white" fill="currentColor" />
             </div>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Jal Rakshak</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">Neer Nirakshan</h1>
             <p className="text-blue-100 text-base sm:text-lg">Select Your Role to Continue</p>
           </div>
 

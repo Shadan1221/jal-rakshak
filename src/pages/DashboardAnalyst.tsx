@@ -60,7 +60,7 @@ const DashboardAnalyst = () => {
             <div className="flex items-center gap-4">
               <Waves className="h-8 w-8" />
               <div>
-                <h1 className="text-2xl font-bold">Jal Rakshak Analytics</h1>
+                <h1 className="text-2xl font-bold">Neer Nirakshan Analytics</h1>
                 <p className="text-sm text-blue-100">Central Analyst Dashboard</p>
               </div>
             </div>
