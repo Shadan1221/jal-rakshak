@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Droplet, ArrowLeft, Eye, EyeOff, Copy, Check, Users, Shield, BarChart3 } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Copy, Check, Users, Shield, BarChart3 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import logo from "@/assets/logo.png";
 
 type Role = "field" | "supervisor" | "analyst";
 
@@ -93,9 +94,11 @@ const Login = () => {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center mb-6">
               <div className="relative">
-                <div className="h-20 w-20 rounded-full bg-gradient-to-br from-primary via-secondary to-accent flex items-center justify-center shadow-lg">
-                  <Droplet className="h-10 w-10 text-white" fill="currentColor" />
-                </div>
+                <img 
+                  src={logo} 
+                  alt="Neer Nirakshan Logo" 
+                  className="h-24 w-24 object-contain"
+                />
               </div>
             </div>
             <h1 className="text-3xl font-bold text-foreground mb-2">Neer Nirakshan</h1>
